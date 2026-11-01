@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ប្រព័ន្ធគ្រប់គ្រងសៀវភៅសិក្សាគោល - ខ្មែរ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Koh+Santepheap:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Login Screen for Librarian -->
+    <div id="login-screen" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background-color: var(--bg-body); padding: 20px; box-sizing: border-box; background-image: radial-gradient(circle at 10% 20%, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 1) 90%);">
+        <div class="card-bg" style="width: 100%; max-width: 420px; padding: 40px 30px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: var(--radius-lg); text-align: center;">
+            <div style="background-color: rgba(220, 170, 80, 0.1); color: var(--accent); padding: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i data-lucide="shield-check" style="width: 40px; height: 40px;"></i>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <h2 style="font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">ប្រព័ន្ធគ្រប់គ្រងសៀវភៅសិក្សាគោល</h2>
+                <span style="font-size: 13px; color: var(--text-muted);">សូមបញ្ចូលគណនីបណ្ណារក្សដើម្បីចូលប្រើប្រាស់</span>
+            </div>
+
+            <div id="login-error-msg" style="display: none; background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 10px 12px; border-radius: var(--radius-md); font-size: 12px; margin-bottom: 20px; text-align: left; align-items: center; gap: 8px;">
+                <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+                <span>ឈ្មោះគណនី ឬលេខសម្ងាត់មិនត្រឹមត្រូវទេ!</span>
+            </div>
+
+            <form id="login-form" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="login-username" style="font-size: 12px; font-weight: 700; margin-bottom: 6px; display: block; color: var(--text-muted);">ឈ្មោះគណនី</label>
+                    <input type="text" id="login-username" class="form-control" placeholder="ឈ្មោះគណនីបណ្ណារក្ស" required style="font-size: 13px; padding: 10px 14px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="login-password" style="font-size: 12px; font-weight: 700; margin-bottom: 6px; display: block; color: var(--text-muted);">លេខសម្ងាត់</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="លេខសម្ងាត់" required style="font-size: 13px; padding: 10px 14px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;">
+                    <i data-lucide="log-in" style="width: 16px; height: 16px;"></i>
+                    <span>ចូលប្រើប្រាស់</span>
+                </button>
+            </form>
+            
+            <div style="margin-top: 30px; font-size: 11px; color: var(--text-muted);">
+                <p>&copy; ២០២៦ - គ្រប់គ្រងដោយគណនីបណ្ណារក្ស</p>
+                <p style="margin-top: 4px; color: var(--accent); font-weight: 500;">គណនីលំនាំដើម៖ admin / 123456</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div class="app-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i data-lucide="book-open"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>សៀវភៅសិក្សាគោល</h2>
+                    <span>ប្រព័ន្ធគ្រប់គ្រងបណ្ណាល័យ</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-view="dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>ផ្ទាំងគ្រប់គ្រង</span>
+                </a>
+                <a href="#" class="menu-item" data-view="books">
+                    <i data-lucide="book-marked"></i>
+                    <span>គ្រប់គ្រងសៀវភៅ</span>
+                </a>
+                <a href="#" class="menu-item" data-view="borrowings">
+                    <i data-lucide="users"></i>
+                    <span>ការខ្ចី និងសង</span>
+                </a>
+                <a href="#" class="menu-item" data-view="students">
+                    <i data-lucide="graduation-cap"></i>
+                    <span>បញ្ជីឈ្មោះសិស្ស</span>
+                </a>
+                <a href="#" class="menu-item" data-view="reports">
+                    <i data-lucide="printer"></i>
+                    <span>បោះពុម្ភរបាយការណ៍</span>
+                </a>
+                <a href="#" class="menu-item" id="logout-btn" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); color: #ef4444;">
+                    <i data-lucide="log-out"></i>
+                    <span>ចាកចេញ</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>&copy; ២០២៦ - គ្រប់គ្រងសៀវភៅ</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1 id="page-title">ផ្ទាំងគ្រប់គ្រង</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="quick-borrow-btn">
+                        <i data-lucide="plus-circle"></i>
+                        <span>ខ្ចីសៀវភៅថ្មី</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="view-content">
+
+                <!-- View 1: Dashboard -->
+                <section id="view-dashboard" class="view-section active">
+                    <!-- KPI Cards Grid -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-icon icon-blue">
+                                <i data-lucide="book"></i>
+                            </div>
+                            <div class="kpi-info">
+                                <h3>ប្រភេទសៀវភៅ</h3>
+                                <p id="kpi-total-types">0</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon icon-purple">
+                                <i data-lucide="layers"></i>
+                            </div>
+                            <div class="kpi-info">
+                                <h3>ចំនួនសៀវភៅសរុប</h3>
+                                <p id="kpi-total-copies">0</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon icon-orange">
+                                <i data-lucide="arrow-up-right"></i>
+                            </div>
+                            <div class="kpi-info">
+                                <h3>កំពុងខ្ចី</h3>
+                                <p id="kpi-borrowed-copies">0</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon icon-green">
+                                <i data-lucide="check-circle2"></i>
+                            </div>
+                            <div class="kpi-info">
+                                <h3>សៀវភៅក្នុងស្តុក</h3>
+                                <p id="kpi-available-copies">0</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon icon-red">
+                                <i data-lucide="alert-triangle"></i>
+                            </div>
+                            <div class="kpi-info">
+                                <h3>ហួសកាលកំណត់</h3>
+                                <p id="kpi-overdue">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Sheets Sync Configuration Panel -->
+                    <div class="card-bg" style="margin-top: 24px; padding: 24px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 16px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; padding: 10px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                    <i data-lucide="refresh-cw" style="width: 24px; height: 24px;"></i>
+                                </div>
+                                <div>
+                                    <h2 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin: 0;">សមកាលកម្មទិន្នន័យជាមួយ Google Sheets</h2>
+                                    <span style="font-size: 12px; color: var(--text-muted);">រក្សាទុកទិន្នន័យសៀវភៅ សិស្ស និងការខ្ចី-សងដោយស្វ័យប្រវត្ត ឬដោយដៃ</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span id="sync-status-label" style="font-size: 12px; color: var(--text-muted); font-weight: 500;">ស្ថានភាព៖ មិនទាន់ភ្ជាប់</span>
+                                <button class="btn btn-success" id="sync-now-btn" style="padding: 8px 16px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                                    <span>សមកាលកម្មឥឡូវនេះ</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 20px; margin-bottom: 16px; align-items: flex-end;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="sheet-webhook-url" style="font-size: 12px; font-weight: bold; margin-bottom: 6px; display: block;">តំណភ្ជាប់ Google Sheet Web App URL</label>
+                                <input type="url" id="sheet-webhook-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec" style="font-size: 13px;">
+                            </div>
+                            <div style="display: flex; align-items: center; padding-bottom: 10px;">
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; user-select: none;">
+                                    <input type="checkbox" id="auto-sync-enable" style="width: 16px; height: 16px; cursor: pointer;">
+                                    <span>សមកាលកម្មដោយស្វ័យប្រវត្ត (នៅពេលទិន្នន័យផ្លាស់ប្តូរ)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <details style="background-color: var(--bg-body); border-radius: var(--radius-md); padding: 12px 16px; cursor: pointer; font-size: 13px; border: 1px dashed var(--border-color);">
+                            <summary style="font-weight: 700; color: var(--primary); outline: none;">🛠️ របៀបតម្លើង និងរៀបចំ Google Sheets (ចុចទីនេះ)</summary>
+                            <div style="padding-top: 12px; color: var(--text-main); line-height: 1.6; cursor: default;">
+                                <ol style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                                    <li>បង្កើត Google Sheet ថ្មីមួយនៅក្នុងគណនី Google Drive របស់អ្នក។</li>
+                                    <li>បើក Google Sheet នោះ រួចចូលទៅកាន់ <strong>Extensions</strong> (ផ្នែកបន្ថែម) -> <strong>Apps Script</strong>។</li>
+                                    <li>លុបកូដចាស់ៗចោល រួចចម្លងកូដ (Apps Script) ខាងក្រោមនេះទៅដាក់៖</li>
+                                </ol>
+                                <pre style="background-color: #1e293b; color: #f8fafc; padding: 12px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 12px; margin: 12px 0; max-height: 250px; user-select: all;" title="ចុចចម្លងកូដនេះ">function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // Save books
+  var sheetBooks = ss.getSheetByName("Books") || ss.insertSheet("Books");
+  sheetBooks.clear();
+  sheetBooks.appendRow(["ID", "Title", "Subject", "Grade", "Quantity", "Borrowed"]);
+  data.books.forEach(function(b) {
+    sheetBooks.appendRow([b.id, b.title, b.subject, b.grade, b.quantity, b.borrowed]);
+  });
+  
+  // Save students
+  var sheetStudents = ss.getSheetByName("Students") || ss.insertSheet("Students");
+  sheetStudents.clear();
+  sheetStudents.appendRow(["ID", "Name", "Gender", "Grade", "Class"]);
+  data.students.forEach(function(s) {
+    sheetStudents.appendRow([s.id, s.name, s.gender, s.grade, s.class]);
+  });
+  
+  // Save borrowings
+  var sheetBorrowings = ss.getSheetByName("Borrowings") || ss.insertSheet("Borrowings");
+  sheetBorrowings.clear();
+  sheetBorrowings.appendRow(["ID", "Student Name", "Student ID", "Grade", "Class", "Borrow Date", "Due Date", "Status", "Books (JSON)"]);
+  data.borrowings.forEach(function(br) {
+    sheetBorrowings.appendRow([
+      br.id, 
+      br.studentName, 
+      br.studentId || "", 
+      br.grade, 
+      br.class, 
+      br.borrowDate, 
+      br.dueDate, 
+      br.status, 
+      JSON.stringify(br.books)
+    ]);
+  });
+  
+  return ContentService.createTextOutput(JSON.stringify({status: "success"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</pre>
+                                <ol start="4" style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                                    <li>ចុចប៊ូតុង <strong>Deploy</strong> (ដាក់ពង្រាយ) -> <strong>New deployment</strong> (ការដាក់ពង្រាយថ្មី)។</li>
+                                    <li>ជ្រើសរើសប្រភេទ <strong>Web app</strong> (កម្មវិធីបណ្តាញ) ដោយកំណត់៖
+                                        <ul>
+                                            <li>Execute as (ដំណើរការជា)៖ <strong>Me (គណនីរបស់អ្នក)</strong></li>
+                                            <li>Who has access (អ្នកណាខ្លះអាចចូលប្រើ)៖ <strong>Anyone (អ្នកណាក៏ដោយ)</strong></li>
+                                        </ul>
+                                    </li>
+                                    <li>ចុចប៊ូតុង <strong>Deploy</strong> រួចចម្លងតំណភ្ជាប់ <strong>Web app URL</strong> យកមកបិទភ្ជាប់ក្នុងប្រអប់បញ្ចូលខាងលើនេះ។</li>
+                                </ol>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Dashboard Layout Details -->
+                    <div class="dashboard-details">
+                        <!-- Left Panel: Recent Actions -->
+                        <div class="detail-card">
+                            <div class="card-header">
+                                <h2>សកម្មភាពខ្ចី-សងថ្មីៗ</h2>
+                                <a href="#" class="btn-text" id="view-all-borrowings">មើលទាំងអស់</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>សិស្ស</th>
+                                                <th>ថ្នាក់ទី</th>
+                                                <th>សៀវភៅសិក្សា</th>
+                                                <th>កាលបរិច្ឆេទខ្ចី</th>
+                                                <th>ស្ថានភាព</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashboard-recent-table">
+                                            <!-- Dynamically generated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Popular Textbooks -->
+                        <div class="detail-card">
+                            <div class="card-header">
+                                <h2>ស្ថិតិសៀវភៅតាមកម្រិតថ្នាក់</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="grade-stats-list" id="grade-stats-container">
+                                    <!-- Dynamically generated bars -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View 2: Books Management -->
+                <section id="view-books" class="view-section">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="book-search" placeholder="ស្វែងរកសៀវភៅ (ចំណងជើង មុខវិជ្ជា)...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="book-grade-filter">
+                                <option value="">គ្រប់កម្រិតថ្នាក់</option>
+                                <option value="1">ថ្នាក់ទី ១</option>
+                                <option value="2">ថ្នាក់ទី ២</option>
+                                <option value="3">ថ្នាក់ទី ៣</option>
+                                <option value="4">ថ្នាក់ទី ៤</option>
+                                <option value="5">ថ្នាក់ទី ៥</option>
+                                <option value="6">ថ្នាក់ទី ៦</option>
+                                <option value="7">ថ្នាក់ទី ៧</option>
+                                <option value="8">ថ្នាក់ទី ៨</option>
+                                <option value="9">ថ្នាក់ទី ៩</option>
+                                <option value="10">ថ្នាក់ទី ១០</option>
+                                <option value="11">ថ្នាក់ទី ១១</option>
+                                <option value="12">ថ្នាក់ទី ១២</option>
+                            </select>
+                            <button class="btn btn-primary" id="add-book-btn">
+                                <i data-lucide="plus"></i>
+                                <span>បន្ថែមសៀវភៅ</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-bg">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ល.រ</th>
+                                        <th>ឈ្មោះសៀវភៅសិក្សា</th>
+                                        <th>មុខវិជ្ជា</th>
+                                        <th>ថ្នាក់ទី</th>
+                                        <th>សរុប</th>
+                                        <th>កំពុងខ្ចី</th>
+                                        <th>នៅសល់</th>
+                                        <th class="actions-col">សកម្មភាព</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="books-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View 3: Borrowings Management -->
+                <section id="view-borrowings" class="view-section">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="borrow-search" placeholder="ស្វែងរកសិស្ស (ឈ្មោះ វគ្គសិក្សា)...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="borrow-status-filter">
+                                <option value="">គ្រប់ស្ថានភាព</option>
+                                <option value="borrowing">កំពុងខ្ចី</option>
+                                <option value="returned">បានសងវិញ</option>
+                                <option value="overdue">ហួសកាលកំណត់</option>
+                            </select>
+                            <button class="btn btn-primary" id="new-borrow-btn">
+                                <i data-lucide="plus-circle"></i>
+                                <span>ខ្ចីសៀវភៅ</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-bg">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ល.រ</th>
+                                        <th>ឈ្មោះសិស្ស</th>
+                                        <th>អត្តសញ្ញាណសិស្ស</th>
+                                        <th>ថ្នាក់/បន្ទប់</th>
+                                        <th>សៀវភៅសិក្សា</th>
+                                        <th>ថ្ងៃខ្ចី</th>
+                                        <th>ថ្ងៃត្រូវសង</th>
+                                        <th>ស្ថានភាព</th>
+                                        <th class="actions-col">សកម្មភាព</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="borrowings-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View 5: Students Management -->
+                <section id="view-students" class="view-section">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="student-search" placeholder="ស្វែងរកសិស្ស (ឈ្មោះ ឬអត្តសញ្ញាណ)...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="student-grade-filter">
+                                <option value="">គ្រប់កម្រិតថ្នាក់</option>
+                                <option value="1">ថ្នាក់ទី ១</option>
+                                <option value="2">ថ្នាក់ទី ២</option>
+                                <option value="3">ថ្នាក់ទី ៣</option>
+                                <option value="4">ថ្នាក់ទី ៤</option>
+                                <option value="5">ថ្នាក់ទី ៥</option>
+                                <option value="6">ថ្នាក់ទី ៦</option>
+                                <option value="7">ថ្នាក់ទី ៧</option>
+                                <option value="8">ថ្នាក់ទី ៨</option>
+                                <option value="9">ថ្នាក់ទី ៩</option>
+                                <option value="10">ថ្នាក់ទី ១០</option>
+                                <option value="11">ថ្នាក់ទី ១១</option>
+                                <option value="12">ថ្នាក់ទី ១២</option>
+                            </select>
+
+                            <!-- Excel Operations -->
+                            <button class="btn btn-success" id="export-students-btn" title="នាំចេញទៅជា Excel (CSV)">
+                                <i data-lucide="download"></i>
+                                <span>នាំចេញ Excel</span>
+                            </button>
+
+                            <label class="btn btn-secondary"
+                                style="cursor: pointer; display: inline-flex; align-items: center; gap: 8px;"
+                                title="នាំចូលសិស្សពី Excel (CSV)">
+                                <i data-lucide="upload"></i>
+                                <span>នាំចូល Excel</span>
+                                <input type="file" id="import-students-file" accept=".csv" style="display: none;">
+                            </label>
+
+                            <button class="btn btn-primary" id="add-student-btn">
+                                <i data-lucide="plus"></i>
+                                <span>បន្ថែមសិស្ស</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-bg">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ល.រ</th>
+                                        <th>អត្តសញ្ញាណសិស្ស</th>
+                                        <th>ឈ្មោះសិស្ស</th>
+                                        <th>ភេទ</th>
+                                        <th>ថ្នាក់ទី</th>
+                                        <th>បន្ទប់/ថ្នាក់កូដ</th>
+                                        <th class="actions-col">សកម្មភាព</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View 4: Reports / Print -->
+                <section id="view-reports" class="view-section">
+                    <div class="report-config-card">
+                        <h2>ការកំណត់បោះពុម្ភបញ្ជីសិស្សខ្ចីសៀវភៅ</h2>
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label for="report-grade">កម្រិតថ្នាក់</label>
+                                <select id="report-grade" class="form-control">
+                                    <option value="">ទាំងអស់</option>
+                                    <option value="1">ថ្នាក់ទី ១</option>
+                                    <option value="2">ថ្នាក់ទី ២</option>
+                                    <option value="3">ថ្នាក់ទី ៣</option>
+                                    <option value="4">ថ្នាក់ទី ៤</option>
+                                    <option value="5">ថ្នាក់ទី ៥</option>
+                                    <option value="6">ថ្នាក់ទី ៦</option>
+                                    <option value="7">ថ្នាក់ទី ៧</option>
+                                    <option value="8">ថ្នាក់ទី ៨</option>
+                                    <option value="9">ថ្នាក់ទី ៩</option>
+                                    <option value="10">ថ្នាក់ទី ១០</option>
+                                    <option value="11">ថ្នាក់ទី ១១</option>
+                                    <option value="12">ថ្នាក់ទី ១២</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-status">ស្ថានភាពខ្ចី</label>
+                                <select id="report-status" class="form-control">
+                                    <option value="">ទាំងអស់</option>
+                                    <option value="borrowing">កំពុងខ្ចី</option>
+                                    <option value="returned">បានសងវិញ</option>
+                                    <option value="overdue">ហួសកាលកំណត់</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-start-date">ចាប់ពីថ្ងៃ</label>
+                                <input type="date" id="report-start-date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="report-end-date">ដល់ថ្ងៃ</label>
+                                <input type="date" id="report-end-date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="config-actions">
+                            <button class="btn btn-secondary" id="preview-report-btn">
+                                <i data-lucide="eye"></i>
+                                <span>បង្ហាញរបាយការណ៍គំរូ</span>
+                            </button>
+                            <button class="btn btn-success" id="print-report-btn">
+                                <i data-lucide="printer"></i>
+                                <span>បោះពុម្ភបញ្ជី (Print PDF)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview Panel -->
+                    <div class="preview-panel" id="report-preview-panel">
+                        <div class="preview-header-bar">
+                            <h3>ផ្ទៃបង្ហាញរបាយការណ៍បោះពុម្ភ (Print Preview)</h3>
+                        </div>
+                        <div class="paper-page" id="printable-report-area">
+                            <!-- This matches what gets printed -->
+                            <div class="print-doc-header">
+                                <div class="cambodia-header">
+                                    <h3>ព្រះរាជាណាចក្រកម្ពុជា</h3>
+                                    <h4>ជាតិ សាសនា ព្រះមហាក្សត្រ</h4>
+                                    <div class="kbach-divider"></div>
+                                </div>
+                                <div class="school-info">
+                                    <p class="school-name">វិទ្យាល័យ ព្រះនរោត្តម សីហមុនី</p>
+                                    <p class="doc-date">ថ្ងៃទី <span class="current-date-khmer">...</span></p>
+                                </div>
+                                <div class="doc-title">
+                                    <h2>បញ្ជីឈ្មោះសិស្សខ្ចីសៀវភៅសិក្សាគោល</h2>
+                                    <p class="doc-subtitle" id="report-filter-subtitle">កម្រិតថ្នាក់៖ ទាំងអស់ |
+                                        ស្ថានភាព៖ ទាំងអស់</p>
+                                </div>
+                            </div>
+
+                            <table class="print-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ល.រ</th>
+                                        <th style="width: 20%">ឈ្មោះសិស្ស</th>
+                                        <th style="width: 10%">ថ្នាក់/បន្ទប់</th>
+                                        <th style="width: 25%">ឈ្មោះសៀវភៅសិក្សា</th>
+                                        <th style="width: 13%">ថ្ងៃខ្ចី</th>
+                                        <th style="width: 13%">ថ្ងៃត្រូវសង</th>
+                                        <th style="width: 14%">ស្ថានភាព</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="print-report-table-body">
+                                    <!-- Generated dynically -->
+                                </tbody>
+                            </table>
+
+                            <div class="print-footer">
+                                <div class="footer-sign">
+
+                                    <br><br>
+                                    <p>បានឃើញ និងឯកភាព</p>
+                                    <p class="sign-title">នាយកវិទ្យាល័យ</p>
+                                    <div class="sign-space"></div>
+                                    <p class="sign-name">(ហត្ថលេខា និងត្រា)</p>
+                                </div>
+                                <div class="footer-sign text-right">
+                                    <p>ថ្ងៃ....................ខែ............ឆ្នាំ................ព.ស ២៥៧...<br>
+                                    <p>ថ្ងៃទី........ខែ........ឆ្នាំ........</p>
+                                    <p class="sign-title">អ្នករៀបចំបញ្ជី</p>
+                                    <div class="sign-space"></div>
+                                    <p class="sign-name">(ហត្ថលេខា និងឈ្មោះ)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal 1: Add/Edit Book -->
+    <div class="modal" id="book-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="book-modal-title">បន្ថែមសៀវភៅថ្មី</h2>
+                <button class="modal-close" id="book-modal-close">&times;</button>
+            </div>
+            <form id="book-form">
+                <input type="hidden" id="edit-book-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="book-title" class="required">ឈ្មោះសៀវភៅសិក្សាគោល</label>
+                        <input type="text" id="book-title" class="form-control" placeholder="ឧ. គណិតវិទ្យា ថ្នាក់ទី ១២"
+                            required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="book-subject" class="required">មុខវិជ្ជា</label>
+                            <input type="text" id="book-subject" class="form-control" placeholder="ឧ. គណិតវិទ្យា"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="book-grade" class="required">សម្រាប់ថ្នាក់ទី</label>
+                            <select id="book-grade" class="form-control" required>
+                                <option value="">ជ្រើសរើសថ្នាក់</option>
+                                <option value="1">ថ្នាក់ទី ១</option>
+                                <option value="2">ថ្នាក់ទី ២</option>
+                                <option value="3">ថ្នាក់ទី ៣</option>
+                                <option value="4">ថ្នាក់ទី ៤</option>
+                                <option value="5">ថ្នាក់ទី ៥</option>
+                                <option value="6">ថ្នាក់ទី ៦</option>
+                                <option value="7">ថ្នាក់ទី ៧</option>
+                                <option value="8">ថ្នាក់ទី ៨</option>
+                                <option value="9">ថ្នាក់ទី ៩</option>
+                                <option value="10">ថ្នាក់ទី ១០</option>
+                                <option value="11">ថ្នាក់ទី ១១</option>
+                                <option value="12">ថ្នាក់ទី ១២</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="book-quantity" class="required">ចំនួនសរុប (ក្បាល)</label>
+                            <input type="number" id="book-quantity" class="form-control" min="1" placeholder="ឧ. ១០០"
+                                required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">បោះបង់</button>
+                    <button type="submit" class="btn btn-primary" id="book-save-btn">រក្សាទុក</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Create Borrowing -->
+    <div class="modal" id="borrow-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="borrow-modal-title">កត់ត្រាការខ្ចីសៀវភៅ</h2>
+                <button class="modal-close" id="borrow-modal-close">&times;</button>
+            </div>
+            <form id="borrow-form">
+                <input type="hidden" id="edit-borrowing-id">
+                <div class="modal-body">
+                    <h3 class="section-divider-title">ព័ត៌មានសិស្ស</h3>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="borrow-student-select">ជ្រើសរើសសិស្សដែលបានចុះឈ្មោះ
+                            (ស្វ័យប្រវត្តិបំពេញព័ត៌មាន)</label>
+                        <select id="borrow-student-select" class="form-control">
+                            <option value="">-- បញ្ចូលព័ត៌មានដោយដៃ ឬជ្រើសរើសសិស្ស --</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="borrow-student-name" class="required">ឈ្មោះសិស្ស</label>
+                            <input type="text" id="borrow-student-name" class="form-control" placeholder="ឧ. សុខ ម៉ារី"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="borrow-student-id">អត្តសញ្ញាណសិស្ស (ID)</label>
+                            <input type="text" id="borrow-student-id" class="form-control" placeholder="ឧ. STD-0012">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="borrow-grade" class="required">ថ្នាក់ទី</label>
+                            <select id="borrow-grade" class="form-control" required>
+                                <option value="">ជ្រើសរើសថ្នាក់</option>
+                                <option value="1">ថ្នាក់ទី ១</option>
+                                <option value="2">ថ្នាក់ទី ២</option>
+                                <option value="3">ថ្នាក់ទី ៣</option>
+                                <option value="4">ថ្នាក់ទី ៤</option>
+                                <option value="5">ថ្នាក់ទី ៥</option>
+                                <option value="6">ថ្នាក់ទី ៦</option>
+                                <option value="7">ថ្នាក់ទី ៧</option>
+                                <option value="8">ថ្នាក់ទី ៨</option>
+                                <option value="9">ថ្នាក់ទី ៩</option>
+                                <option value="10">ថ្នាក់ទី ១០</option>
+                                <option value="11">ថ្នាក់ទី ១១</option>
+                                <option value="12">ថ្នាក់ទី ១២</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="borrow-class" class="required">បន្ទប់/ថ្នាក់កូដ</label>
+                            <input type="text" id="borrow-class" class="form-control" placeholder="ឧ. ក ឬ 12A" required>
+                        </div>
+                    </div>
+
+                    <h3 class="section-divider-title">ព័ត៌មានសៀវភៅ</h3>
+                    <div class="form-group">
+                        <label class="required">ជ្រើសរើសសៀវភៅសិក្សា (អាចជ្រើសរើសបានច្រើន)</label>
+                        <div id="borrow-books-list"
+                            style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: var(--bg-card);">
+                            <!-- Dynamically populated options -->
+                        </div>
+                        <span class="help-text" id="book-stock-indicator">សូមជ្រើសរើសសៀវភៅសិក្សាគោលយ៉ាងហោចណាស់ ១
+                            ក្បាល</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="borrow-date" class="required">ថ្ងៃខ្ចី</label>
+                            <input type="date" id="borrow-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="borrow-due-date" class="required">ថ្ងៃត្រូវសង</label>
+                            <input type="date" id="borrow-due-date" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">បោះបង់</button>
+                    <button type="submit" class="btn btn-primary">រក្សាទុកការខ្ចី</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Add/Edit Student -->
+    <div class="modal" id="student-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="student-modal-title">បន្ថែមសិស្សថ្មី</h2>
+                <button class="modal-close" id="student-modal-close">&times;</button>
+            </div>
+            <form id="student-form">
+                <input type="hidden" id="edit-student-id-old">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="student-id" class="required">អត្តសញ្ញាណសិស្ស (ID)</label>
+                            <input type="text" id="student-id" class="form-control" placeholder="ឧ. STD-0001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-name" class="required">ឈ្មោះសិស្ស</label>
+                            <input type="text" id="student-name" class="form-control" placeholder="ឧ. កែវ មុនី"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="student-gender" class="required">ភេទ</label>
+                            <select id="student-gender" class="form-control" required>
+                                <option value="">ជ្រើសរើសភេទ</option>
+                                <option value="ប្រុស">ប្រុស</option>
+                                <option value="ស្រី">ស្រី</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-grade" class="required">ថ្នាក់ទី</label>
+                            <select id="student-grade" class="form-control" required>
+                                <option value="">ជ្រើសរើសថ្នាក់</option>
+                                <option value="1">ថ្នាក់ទី ១</option>
+                                <option value="2">ថ្នាក់ទី ២</option>
+                                <option value="3">ថ្នាក់ទី ៣</option>
+                                <option value="4">ថ្នាក់ទី ៤</option>
+                                <option value="5">ថ្នាក់ទី ៥</option>
+                                <option value="6">ថ្នាក់ទី ៦</option>
+                                <option value="7">ថ្នាក់ទី ៧</option>
+                                <option value="8">ថ្នាក់ទី ៨</option>
+                                <option value="9">ថ្នាក់ទី ៩</option>
+                                <option value="10">ថ្នាក់ទី ១០</option>
+                                <option value="11">ថ្នាក់ទី ១១</option>
+                                <option value="12">ថ្នាក់ទី ១២</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-class" class="required">បន្ទប់/ថ្នាក់កូដ</label>
+                        <input type="text" id="student-class" class="form-control" placeholder="ឧ. ក ឬ 12A" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">បោះបង់</button>
+                    <button type="submit" class="btn btn-primary" id="student-save-btn">រក្សាទុក</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Return Books -->
+    <div class="modal" id="return-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>កត់ត្រាការប្រគល់សៀវភៅសង</h2>
+                <button class="modal-close" id="return-modal-close">&times;</button>
+            </div>
+            <form id="return-form">
+                <input type="hidden" id="return-borrowing-id">
+                <div class="modal-body">
+                    <p style="margin-bottom: 16px; font-size: 14px;">
+                        ឈ្មោះសិស្ស៖ <strong id="return-student-name-label" style="color: var(--primary);">...</strong>
+                    </p>
+                    <div class="form-group">
+                        <label class="required">ជ្រើសរើសសៀវភៅសិក្សាដែលត្រូវប្រគល់សង</label>
+                        <div id="return-books-list"
+                            style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: var(--bg-card);">
+                            <!-- Dynamic checkboxes for active borrowed books -->
+                        </div>
+                        <span class="help-text">សូមគូសធីកលើសៀវភៅដែលសិស្សបានយកមកសង</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">បោះបង់</button>
+                    <button type="submit" class="btn btn-success">រក្សាទុកការសង</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Printable Area for Receipts (A5 or mini receipt format) -->
+    <div id="print-receipt-area" class="print-only">
+        <div class="receipt-box">
+            <div class="cambodia-header" align="center">
+                <h3>ព្រះរាជាណាចក្រកម្ពុជា</h3>
+                <h4>ជាតិ សាសនា ព្រះមហាក្សត្រ</h4>
+                <div class="kbach-divider"></div>
+            </div>
+            <div class="school-info">
+                <p>ការិ អយក រដ្ឋបាលនៃស្រុកជលគិរី</p>
+                <p>វិទ្យាយព្រះនរោត្តម សីហមុនី</p>
+            </div>
+            <div class="doc-title">
+                <h2>បង្កាន់ដៃខ្ចី-សងសៀវភៅសិក្សាគោល</h2>
+                <p>ឈ្មោះសិស្ស៖ <span id="pr-student-name">#0001</span></p>
+                <p>ថ្នាក់៖ <span id="pr-student-grade">#0001</span></p>
+                <p>លេខសិស្ស៖ <span id="pr-student-id">#0001</span></p>
+            </div>
+
+            <div class="receipt-details">
+
+
+                <table class="receipt-items-table">
+                    <thead>
+                        <tr>
+                            <th>ឈ្មោះសៀវភៅសិក្សាគោល</th>
+                            <th>ថ្ងៃខ្ចី</th>
+                            <th>ថ្ងៃត្រូវសង</th>
+                            <th>ថ្ងៃបានសង</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span id="pr-book-title">...</span></td>
+                            <td><span id="pr-borrow-date">...</span></td>
+                            <td><span id="pr-due-date">...</span></td>
+                            <td><span id="pr-return-date">-</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="receipt-note">
+                    <p>* សេចក្តីបញ្ជាក់៖ សូមរក្សាទុកសៀវភៅឱ្យបានល្អ កុំឱ្យហែក ឬបាត់បង់ និងសងឱ្យបានទាន់ពេលវេលា។</p>
+                </div>
+
+                <div class="print-footer">
+                    <div class="footer-sign">
+                        <br>
+                        <p class="sign-title">ស្នាមមេដៃ/ហត្ថលេខាសិស្ស</p>
+                        <div class="sign-space"></div>
+                    </div>
+                    <div class="footer-sign text-right">
+                        <p class="pr-date">ថ្ងៃទី ............ ខែ ............ ឆ្នាំ ............</p>
+                        <p class="sign-title">បណ្ណារក្សសាលា</p>
+                        <div class="sign-space"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Script File -->
+        <script src="app.js?v=3"></script>
+</body>
+
+</html>
